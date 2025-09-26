@@ -1,21 +1,20 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define EPSILON 1e-6
 
 double f(double);
 double compute(double, double);
-void getInputs(double*, double*);
+void getInputs(double *, double *);
 
-int main()
-{
-  printf("Compute the roots of the function f(x)=x^3-2x+4 in the specified range [a,b].\n");
+int main() {
+  printf("Compute the roots of the function f(x)=x^3-2x+4 in the specified "
+         "range [a,b].\n");
 
   double a, b;
   getInputs(&a, &b);
 
-  if (f(a) * f(b) > 0)
-  {
+  if (f(a) * f(b) > 0) {
     printf("There are no solutions within [%lf, %lf]\n", a, b);
     return 0;
   }
@@ -26,10 +25,8 @@ int main()
   return 0;
 }
 
-void getInputs(double* a, double* b)
-{
-  do
-  {
+void getInputs(double *a, double *b) {
+  do {
     printf("Enter lower bound a: ");
     scanf("%lf", a);
     printf("Enter upper bound b: ");
@@ -37,11 +34,9 @@ void getInputs(double* a, double* b)
   } while (*b <= *a);
 }
 
-double compute(double a, double b)
-{
+double compute(double a, double b) {
   double result;
-  while (fabs(a - b) > EPSILON)
-  {
+  while (fabs(a - b) > EPSILON) {
     result = (a + b) / 2;
     double product = f(a) * f(result);
 
@@ -56,7 +51,4 @@ double compute(double a, double b)
   return result;
 }
 
-double f(double x)
-{
-  return x * x * x - 2 * x + 4;
-}
+double f(double x) { return x * x * x - 2 * x + 4; }

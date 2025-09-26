@@ -1,12 +1,11 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #define PERIODS 4
 #define FRACTION 100000
 
 /*struct param definition*/
-typedef struct param
-{
+typedef struct param {
   double k, m, x_0, v_0;
 } param;
 
@@ -17,13 +16,13 @@ double RungeKutta4(param, double, double);
 double acceleration(double, param);
 
 /*main function*/
-int main()
-{
+int main() {
   /*variables statement*/
   int i;
   param inPar;
   double dT, Tmax, ener[3], expectedPeriod;
-  printf("#Comparing energy error of Euler, Velocity Verlet and Runge Kutta 4. \n#\tdT/period\tEuler\tVelVerlet\tRK4\n");
+  printf("#Comparing energy error of Euler, Velocity Verlet and Runge Kutta 4. "
+         "\n#\tdT/period\tEuler\tVelVerlet\tRK4\n");
   /*get data*/
   fprintf(stderr, "k: ");
   scanf("%lf", &inPar.k);
@@ -39,8 +38,7 @@ int main()
   /*run algorithms*/
   i = 1;
   dT = 0;
-  while (dT < expectedPeriod)
-  {
+  while (dT < expectedPeriod) {
     dT = (double)(i * expectedPeriod / FRACTION);
     printf("\t%lf", dT);
     ener[0] = Euler(inPar, dT, Tmax);
@@ -55,14 +53,12 @@ int main()
 }
 
 /*function Euler*/
-double Euler(struct param inPar, double dt, double tmax)
-{
+double Euler(struct param inPar, double dt, double tmax) {
   double xtemp, x = inPar.x_0, v = inPar.v_0, dE, E_0;
   int i, N;
   N = (int)(tmax / dt);
   E_0 = v * v * inPar.m / 2 - inPar.k * x * x / 2;
-  for (i = 0; i < N + 1; i++)
-  {
+  for (i = 0; i < N + 1; i++) {
     xtemp = x;
     x = x + v * dt;
     v = v + acceleration(xtemp, inPar) * dt;
@@ -72,14 +68,12 @@ double Euler(struct param inPar, double dt, double tmax)
 }
 
 /*function Velocity Verlet*/
-double VelocityVerlet(param inPar, double dt, double tmax)
-{
+double VelocityVerlet(param inPar, double dt, double tmax) {
   double x1 = inPar.x_0, x2, v = inPar.v_0, dE, E_0;
   int i, N;
   N = (int)(tmax / dt);
   E_0 = v * v * inPar.m / 2 - inPar.k * x1 * x1 / 2;
-  for (i = 0; i < N + 1; i++)
-  {
+  for (i = 0; i < N + 1; i++) {
     x2 = x1 + v * dt + acceleration(x1, inPar) * dt * dt / 2;
     v = v + (acceleration(x2, inPar) + acceleration(x1, inPar)) * dt / 2;
     x1 = x2;
@@ -89,15 +83,13 @@ double VelocityVerlet(param inPar, double dt, double tmax)
 }
 
 /*function Runge Kutta 4*/
-double RungeKutta4(param inPar, double dt, double tmax)
-{
+double RungeKutta4(param inPar, double dt, double tmax) {
   double x1 = inPar.x_0, x2, v = inPar.v_0, dE, E_0;
   double k1, k2, k3, k4, l1, l2, l3, l4;
   int i, N;
   N = (int)(tmax / dt);
   E_0 = v * v * inPar.m / 2 - inPar.k * x1 * x1 / 2;
-  for (i = 0; i < N + 1; i++)
-  {
+  for (i = 0; i < N + 1; i++) {
     k1 = v;
     l1 = acceleration(x1, inPar);
     k2 = v + l1 * dt / 2;
@@ -115,7 +107,6 @@ double RungeKutta4(param inPar, double dt, double tmax)
 }
 
 /*function acceleration*/
-double acceleration(double x, param inPar)
-{
+double acceleration(double x, param inPar) {
   return -inPar.k * x / inPar.m;
 } /*accel*/

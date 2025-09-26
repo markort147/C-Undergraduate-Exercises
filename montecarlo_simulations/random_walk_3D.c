@@ -3,13 +3,11 @@
 #define TMAX 1000
 #define TRAJECTORIES 1000
 
-typedef struct coordinates
-{
+typedef struct coordinates {
   long int x, y, z;
 } coords;
 
-int main()
-{
+int main() {
   /*seed*/
   FILE *fseed;
   unsigned int seed;
@@ -27,11 +25,9 @@ int main()
   b3 = 76. / 88;
   b4 = 80. / 88;
   b5 = 84. / 88;
-  for (j = 0; j < TRAJECTORIES; j++)
-  {
+  for (j = 0; j < TRAJECTORIES; j++) {
     pos.x = pos.y = pos.z = 0;
-    for (i = 0; i < TMAX; i++)
-    {
+    for (i = 0; i < TMAX; i++) {
       r = drand48();
       if (r < b1)
         pos.z--;

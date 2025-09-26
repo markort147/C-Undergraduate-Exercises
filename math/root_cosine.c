@@ -6,15 +6,15 @@
 #endif
 #define EPSILON 1.e-6
 
-int main()
-{
-  printf("Compute the root of cos(x) in (0, PI) within an error delta of %.10lf.\n", EPSILON);
+int main() {
+  printf("Compute the root of cos(x) in (0, PI) within an error delta of "
+         "%.10lf.\n",
+         EPSILON);
 
   double a, b = M_PI, c;
   double delta = fabs(a - b);
   int i = 1;
-  while (delta > EPSILON)
-  {
+  while (delta > EPSILON) {
     double p;
     c = 0.5 * (a + b);
     p = cos(a) * cos(c);
