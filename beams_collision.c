@@ -9,8 +9,26 @@ typedef struct {
   double x, y;
 } Particle;
 
-Particle *generateCoordinates(int);
-void clearStdin(void);
+static Particle *generate_coordinates(int num) {
+  Particle *beam = (Particle *)malloc(num * sizeof(Particle));
+  if (beam != NULL) {
+    double beam_radius_sqr = BEAM_RADIUS * BEAM_RADIUS;
+    for (int i = 0; i < num; i++) {
+      Particle *p = beam + i;
+      do {
+        p->x = (2.0 * rand() / (double)RAND_MAX - 1.0) * BEAM_RADIUS;
+        p->y = (2.0 * rand() / (double)RAND_MAX - 1.0) * BEAM_RADIUS;
+      } while ((p->x * p->x) + (p->y * p->y) - beam_radius_sqr > 0);
+    }
+  }
+  return beam;
+}
+
+static void clear_stdin(void) {
+  int c;
+  while ((c = getchar()) != '\n' && c != EOF) {
+  }
+}
 
 int main() {
 
@@ -23,54 +41,54 @@ int main() {
          "beam, with a radius defined by the user.\n");
 
   // Acquiring parameters
-  int scanRes;
-  int numParticles1;
+  int scan_res;
+  int num_particles_1;
   do {
     printf("Enter the amount of particles in the first beam (0,%d]:",
            MAX_PARTICLES);
-    scanRes = scanf("%d", &numParticles1);
-    if (scanRes == EOF) {
+    scan_res = scanf("%d", &num_particles_1);
+    if (scan_res == EOF) {
       fprintf(stderr, "EOF on input\n");
       return 1;
     }
-    if (scanRes != 1)
-      clearStdin();
-  } while (scanRes != 1 || numParticles1 <= 0 || numParticles1 > MAX_PARTICLES);
+    if (scan_res != 1)
+      clear_stdin();
+  } while (scan_res != 1 || num_particles_1 <= 0 || num_particles_1 > MAX_PARTICLES);
 
-  int numParticles2;
+  int num_particles_2;
   do {
     printf("Enter the amount of particles in the second beam (0,%d]:",
            MAX_PARTICLES);
-    scanRes = scanf("%d", &numParticles2);
-    if (scanRes == EOF) {
+    scan_res = scanf("%d", &num_particles_2);
+    if (scan_res == EOF) {
       fprintf(stderr, "EOF on input\n");
       return 1;
     }
-    if (scanRes != 1)
-      clearStdin();
-  } while (scanRes != 1 || numParticles2 <= 0 || numParticles2 > MAX_PARTICLES);
+    if (scan_res != 1)
+      clear_stdin();
+  } while (scan_res != 1 || num_particles_2 <= 0 || num_particles_2 > MAX_PARTICLES);
 
-  double particleRadius;
+  double particle_radius;
   do {
     printf("Enter the particles radius (0,%f]:", MAX_PARTICLE_RADIUS);
-    scanRes = scanf("%lf", &particleRadius);
-    if (scanRes == EOF) {
+    scan_res = scanf("%lf", &particle_radius);
+    if (scan_res == EOF) {
       fprintf(stderr, "EOF on input\n");
       return 1;
     }
-    if (scanRes != 1)
-      clearStdin();
-  } while (scanRes != 1 || particleRadius <= 0 ||
-           particleRadius > MAX_PARTICLE_RADIUS);
+    if (scan_res != 1)
+      clear_stdin();
+  } while (scan_res != 1 || particle_radius <= 0 ||
+           particle_radius > MAX_PARTICLE_RADIUS);
 
   // Generating random coordinates
-  Particle *beam1 = generateCoordinates(numParticles1);
+  Particle *beam1 = generate_coordinates(num_particles_1);
   if (beam1 == NULL) {
     printf("Error instantiating beam1\n");
     return 1;
   }
 
-  Particle *beam2 = generateCoordinates(numParticles2);
+  Particle *beam2 = generate_coordinates(num_particles_2);
   if (beam2 == NULL) {
     printf("Error instantiating beam2\n");
     free(beam1);
@@ -79,14 +97,14 @@ int main() {
 
   // Counting the collisions
   int collisions = 0;
-  double particleRadiusSqr = particleRadius * particleRadius;
-  for (int i = 0; i < numParticles1; i++) {
+  double particle_radius_sqr = particle_radius * particle_radius;
+  for (int i = 0; i < num_particles_1; i++) {
     Particle p1 = *(beam1 + i);
-    for (int j = 0; j < numParticles2; j++) {
+    for (int j = 0; j < num_particles_2; j++) {
       Particle p2 = *(beam2 + j);
       double dx = p1.x - p2.x;
       double dy = p1.y - p2.y;
-      if (dx * dx + dy * dy <= particleRadiusSqr) {
+      if (dx * dx + dy * dy <= particle_radius_sqr) {
         collisions++;
         break;
       }
@@ -96,32 +114,11 @@ int main() {
   // Printing the result
   printf("Collisions: %d\n", collisions);
   printf("Ratio of collisions in the first beam: %f%%\n",
-         100. * collisions / (double)numParticles1);
+         100. * collisions / (double)num_particles_1);
   printf("Ratio of collisions in the second beam: %f%%\n",
-         100. * collisions / (double)numParticles2);
+         100. * collisions / (double)num_particles_2);
 
   free(beam1);
   free(beam2);
   return 0;
-}
-
-Particle *generateCoordinates(int num) {
-  Particle *beam = (Particle *)malloc(num * sizeof(Particle));
-  if (beam != NULL) {
-    double beamRadiusSqr = BEAM_RADIUS * BEAM_RADIUS;
-    for (int i = 0; i < num; i++) {
-      Particle *p = beam + i;
-      do {
-        p->x = (2.0 * rand() / (double)RAND_MAX - 1.0) * BEAM_RADIUS;
-        p->y = (2.0 * rand() / (double)RAND_MAX - 1.0) * BEAM_RADIUS;
-      } while ((p->x * p->x) + (p->y * p->y) - beamRadiusSqr > 0);
-    }
-  }
-  return beam;
-}
-
-void clearStdin(void) {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF) {
-  }
 }

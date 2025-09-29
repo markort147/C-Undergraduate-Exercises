@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #define G (9.81)
 
-static void clearStdin(void) {
+static void clear_stdin(void) {
   int c;
   while ((c = getchar()) != '\n' && c != EOF) {
   }
 }
 
-static double readDoubleMin(const char *prompt, double min, int inclusive) {
+static double read_double_min(const char *prompt, double min, int inclusive) {
   while (1) {
     double x;
     int r;
@@ -19,7 +19,7 @@ static double readDoubleMin(const char *prompt, double min, int inclusive) {
       exit(EXIT_FAILURE);
     }
     if (r != 1) {
-      clearStdin();
+      clear_stdin();
       continue;
     }
     if ((inclusive && x >= min) || (!inclusive && x > min))
@@ -28,7 +28,7 @@ static double readDoubleMin(const char *prompt, double min, int inclusive) {
   }
 }
 
-static int readChoice(const char *prompt) {
+static int read_choice(const char *prompt) {
   while (1) {
     int opt;
     int r;
@@ -39,7 +39,7 @@ static int readChoice(const char *prompt) {
       exit(EXIT_FAILURE);
     }
     if (r != 1) {
-      clearStdin();
+      clear_stdin();
       continue;
     }
     if (opt == 0 || opt == 1)
@@ -49,10 +49,10 @@ static int readChoice(const char *prompt) {
 
 int main() {
   while (1) {
-    double t = readDoubleMin("Enter the time: ", 0.0, 0);
-    double m = readDoubleMin("Enter the mass: ", 0.0, 0);
-    double v0 = readDoubleMin("Enter the initial speed: ", 0.0, 1);
-    double h0 = readDoubleMin("Enter the initial height: ", 0.0, 0);
+    double t = read_double_min("Enter the time: ", 0.0, 0);
+    double m = read_double_min("Enter the mass: ", 0.0, 0);
+    double v0 = read_double_min("Enter the initial speed: ", 0.0, 1);
+    double h0 = read_double_min("Enter the initial height: ", 0.0, 0);
 
     double v = v0 - G * t;
     double h = h0 - v0 * t - .5 * G * t * t;
@@ -65,7 +65,7 @@ int main() {
     } else
       printf("The particle reached the ground!\n");
 
-    if (!readChoice("1 for changing time, 0 for exit: "))
+    if (!read_choice("1 for changing time, 0 for exit: "))
       break;
   }
 }
