@@ -48,9 +48,6 @@ static int readChoice(const char *prompt) {
 }
 
 int main() {
-  int scanRes;
-
-  int option;
   while (1) {
     double t = readDoubleMin("Enter the time: ", 0.0, 0);
     double m = readDoubleMin("Enter the mass: ", 0.0, 0);
